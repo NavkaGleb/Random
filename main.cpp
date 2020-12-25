@@ -4,7 +4,7 @@
 
 int main() {
     for (int i = 0; i < 10; ++i)
-        std::cout << Ng::Random::Get<int>(-5, 5) << std::endl;
+        std::cout << Ng::Random::Get<bool>(0.5f) << std::endl;
 
     return 0;
 }

@@ -12,6 +12,7 @@ namespace Ng {
     class Random {
     public:
         // aliases
+                              using BooleanDistribution = std::bernoulli_distribution;
         template <typename T> using IntegerDistribution = std::uniform_int_distribution<T>;
         template <typename T> using RealDistribution    = std::uniform_real_distribution<T>;
         template <typename T> using Limit               = std::numeric_limits<T>;
@@ -21,6 +22,9 @@ namespace Ng {
         ~Random() = default;
 
         // static public methods
+        template <typename T>
+        static bool Get(float probability);
+
         template <typename T>
         static T Get(T left = Limit<T>::min(), T right = Limit<T>::max());
 
@@ -35,6 +39,9 @@ namespace Ng {
         static Random& GetInstance();
 
         // member methods
+        template <typename T>
+        typename std::enable_if<std::is_same<T, bool>::value, bool>::type GetImpl(float probability);
+
         template <typename T>
         typename std::enable_if<std::is_integral<T>::value, T>::type GetImpl(T left, T right);
 
@@ -52,6 +59,11 @@ namespace Ng {
     /// Source
     //////////////////////////////////////////////////////////////////////////////
     // static public methods
+    template <typename T>
+    bool Random::Get(float probability) {
+        return GetInstance().GetImpl<T>(probability);
+    }
+
     template <typename T>
     T Random::Get(T left, T right) {
         return GetInstance().GetImpl<T>(left, right);
@@ -72,6 +84,11 @@ namespace Ng {
     }
 
     // member methods
+    template <typename T>
+    typename std::enable_if<std::is_same<T, bool>::value, bool>::type Random::GetImpl(float probability) {
+        return BooleanDistribution(probability)(m_MersenneTwister);
+    }
+
     template <typename T>
     typename std::enable_if<std::is_integral<T>::value, T>::type Random::GetImpl(T left, T right) {
         return left < right ?
