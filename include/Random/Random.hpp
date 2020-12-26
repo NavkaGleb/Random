@@ -22,7 +22,7 @@ namespace Ng {
     class Random {
     public:
         // Aliases
-            using BooleanDistribution = std::bernoulli_distribution;
+                              using BooleanDistribution = std::bernoulli_distribution;
         template <typename T> using IntegerDistribution = std::uniform_int_distribution<T>;
         template <typename T> using RealDistribution    = std::uniform_real_distribution<T>;
         template <typename T> using Limit               = std::numeric_limits<T>;
@@ -33,7 +33,7 @@ namespace Ng {
 
         // Static public methods
         template <typename T>
-        static bool Get(float probability = 0.5f);
+        static T Get(float probability = 0.5f);
 
         template <typename T>
         static T Get(T left = Limit<T>::min(), T right = Limit<T>::max());
@@ -49,8 +49,8 @@ namespace Ng {
         static Random& GetInstance();
 
         // Member methods
-        template <>
-        bool GetImpl<bool>(float probability);
+        template <typename T>
+        typename std::enable_if<std::is_same<T, bool>::value, bool>::type GetImpl(float probability);
 
         template <typename T>
         typename std::enable_if<std::is_integral<T>::value, T>::type GetImpl(T left, T right);
@@ -69,9 +69,9 @@ namespace Ng {
     /// Source
     //////////////////////////////////////////////////////////////////////////////
     // Static public methods
-    template <>
-    bool Random::Get<bool>(float probability) {
-        return GetInstance().GetImpl<bool>(probability);
+    template <typename T>
+    T Random::Get(float probability) {
+        return GetInstance().GetImpl<T>(probability);
     }
 
     template <typename T>
@@ -82,9 +82,9 @@ namespace Ng {
     // Member constructor
     Random::Random() :
         m_SeedSequence({
-           m_RandomDevice(),
-           static_cast<unsigned int>(std::chrono::steady_clock::now().time_since_epoch().count())
-        }),
+                           m_RandomDevice(),
+                           static_cast<unsigned int>(std::chrono::steady_clock::now().time_since_epoch().count())
+                       }),
         m_MersenneTwister(m_SeedSequence) { }
 
     // Member static methods
@@ -94,23 +94,23 @@ namespace Ng {
     }
 
     // Member methods
-    template <typename T>
-    typename std::enable_if<std::is_same<T, bool>::value, bool>::type Random::GetImpl(float probability) {
+    template <>
+    bool Random::GetImpl<bool>(float probability) {
         return BooleanDistribution(probability)(m_MersenneTwister);
     }
 
     template <typename T>
     typename std::enable_if<std::is_integral<T>::value, T>::type Random::GetImpl(T left, T right) {
         return left < right ?
-            IntegerDistribution<T>(left, right)(m_MersenneTwister) :
-            IntegerDistribution<T>(right, left)(m_MersenneTwister);
+               IntegerDistribution<T>(left, right)(m_MersenneTwister) :
+               IntegerDistribution<T>(right, left)(m_MersenneTwister);
     }
 
     template <typename T>
     typename std::enable_if<std::is_floating_point<T>::value, T>::type Random::GetImpl(T left, T right) {
         return left < right ?
-            RealDistribution<T>(left, right)(m_MersenneTwister) :
-            RealDistribution<T>(right, left)(m_MersenneTwister);
+               RealDistribution<T>(left, right)(m_MersenneTwister) :
+               RealDistribution<T>(right, left)(m_MersenneTwister);
     }
 
 } // namespace Ng
