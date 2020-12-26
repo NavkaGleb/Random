@@ -1,3 +1,13 @@
+//////////////////////////////////////////////////////////////////////////////
+/// ####   ##   ##   # ####   ###  ##   ##
+/// #  #  #  #  # #  # #   # #   # # # # #
+/// ###   ####  # #  # #   # #   # #  #  #
+/// # #  ##  ## #  # # #   # #   # #     #
+/// #  # #    # #   ## ####   ###  #     #
+///
+/// Version 1.0
+//////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
 #include <random>
@@ -11,36 +21,36 @@ namespace Ng {
     //////////////////////////////////////////////////////////////////////////////
     class Random {
     public:
-        // aliases
-                              using BooleanDistribution = std::bernoulli_distribution;
+        // Aliases
+            using BooleanDistribution = std::bernoulli_distribution;
         template <typename T> using IntegerDistribution = std::uniform_int_distribution<T>;
         template <typename T> using RealDistribution    = std::uniform_real_distribution<T>;
         template <typename T> using Limit               = std::numeric_limits<T>;
 
-        // constructor / destructor
+        // Constructor / Destructor
         Random(const Random& other) = delete;
         ~Random() = default;
 
-        // static public methods
+        // Static public methods
         template <typename T>
-        static bool Get(float probability);
+        static bool Get(float probability = 0.5f);
 
         template <typename T>
         static T Get(T left = Limit<T>::min(), T right = Limit<T>::max());
 
-        // operators
+        // Operators
         Random operator=(const Random& other) = delete;
 
     private:
-        // member constructor
+        // Member constructor
         Random();
 
-        // member static methods
+        // Member static methods
         static Random& GetInstance();
 
-        // member methods
-        template <typename T>
-        typename std::enable_if<std::is_same<T, bool>::value, bool>::type GetImpl(float probability);
+        // Member methods
+        template <>
+        bool GetImpl<bool>(float probability);
 
         template <typename T>
         typename std::enable_if<std::is_integral<T>::value, T>::type GetImpl(T left, T right);
@@ -48,7 +58,7 @@ namespace Ng {
         template <typename T>
         typename std::enable_if<std::is_floating_point<T>::value, T>::type GetImpl(T left, T right);
 
-        // member data
+        // Member data
         std::random_device m_RandomDevice;
         std::seed_seq      m_SeedSequence;
         std::mt19937       m_MersenneTwister;
@@ -58,10 +68,10 @@ namespace Ng {
     //////////////////////////////////////////////////////////////////////////////
     /// Source
     //////////////////////////////////////////////////////////////////////////////
-    // static public methods
-    template <typename T>
-    bool Random::Get(float probability) {
-        return GetInstance().GetImpl<T>(probability);
+    // Static public methods
+    template <>
+    bool Random::Get<bool>(float probability) {
+        return GetInstance().GetImpl<bool>(probability);
     }
 
     template <typename T>
@@ -69,7 +79,7 @@ namespace Ng {
         return GetInstance().GetImpl<T>(left, right);
     }
 
-    // member constructor
+    // Member constructor
     Random::Random() :
         m_SeedSequence({
            m_RandomDevice(),
@@ -77,13 +87,13 @@ namespace Ng {
         }),
         m_MersenneTwister(m_SeedSequence) { }
 
-    // member static methods
+    // Member static methods
     Random& Random::GetInstance() {
         static Random instance;
         return instance;
     }
 
-    // member methods
+    // Member methods
     template <typename T>
     typename std::enable_if<std::is_same<T, bool>::value, bool>::type Random::GetImpl(float probability) {
         return BooleanDistribution(probability)(m_MersenneTwister);
