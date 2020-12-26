@@ -1,4 +1,5 @@
 # Random Library
+Simple header only "Random" library
 ### Usage
 ```cpp
 #include <iostream>
