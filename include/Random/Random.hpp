@@ -80,8 +80,8 @@ namespace Ng {
     }
 
     // Member methods
-    template <>
-    bool Random::GetImpl<bool>(float probability) {
+    template <typename T>
+    typename std::enable_if<std::is_same<T, bool>::value, bool>::type Random::GetImpl(float probability) {
         return BooleanDistribution(probability)(m_MersenneTwister);
     }
 
