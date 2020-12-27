@@ -31,7 +31,7 @@ namespace Ng {
         Random(const Random& other) = delete;
         ~Random() = default;
 
-        // Static public methods
+        // Public static methods
         template <typename T>
         static T Get(float probability = 0.5f);
 
@@ -39,7 +39,7 @@ namespace Ng {
         static T Get(T left = Limit<T>::min(), T right = Limit<T>::max());
 
         // Operators
-        Random operator=(const Random& other) = delete;
+        Random& operator=(const Random& other) = delete;
 
     private:
         // Member constructor
@@ -82,9 +82,9 @@ namespace Ng {
     // Member constructor
     Random::Random() :
         m_SeedSequence({
-                           m_RandomDevice(),
-                           static_cast<unsigned int>(std::chrono::steady_clock::now().time_since_epoch().count())
-                       }),
+            m_RandomDevice(),
+            static_cast<unsigned int>(std::chrono::steady_clock::now().time_since_epoch().count())
+        }),
         m_MersenneTwister(m_SeedSequence) { }
 
     // Member static methods
