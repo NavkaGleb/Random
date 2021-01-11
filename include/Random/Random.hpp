@@ -33,7 +33,7 @@ namespace Ng {
 
         // Public static methods
         template <typename T>
-        static T Get(float probability = 0.5f);
+        static T Get(float probability);
 
         template <typename T>
         static T Get(T left = Limit<T>::min(), T right = Limit<T>::max());
