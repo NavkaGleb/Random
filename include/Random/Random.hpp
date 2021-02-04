@@ -85,6 +85,11 @@ namespace Ng {
         return GetInstance().GetImpl<T>(left, right);
     }
 
+    template <typename T>
+    T Random::Get(const std::vector<T>& data) {
+        return GetInstance().GetImpl(data);
+    }
+
     // Member methods
     template <typename T>
     typename std::enable_if<std::is_same<T, bool>::value, bool>::type Random::GetImpl(float probability) {
