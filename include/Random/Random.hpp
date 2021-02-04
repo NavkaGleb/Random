@@ -5,7 +5,7 @@
 /// # #  ##  ## #  # # #   # #   # #     #
 /// #  # #    # #   ## ####   ###  #     #
 ///
-/// Version 1.0
+/// Version 1.1
 //////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -38,6 +38,9 @@ namespace Ng {
         template <typename T>
         static T Get(T left = Limit<T>::min(), T right = Limit<T>::max());
 
+        template <typename T>
+        static T Get(const std::vector<T>& data);
+
         // Operators
         Random& operator=(const Random& other) = delete;
 
@@ -57,6 +60,9 @@ namespace Ng {
 
         template <typename T>
         typename std::enable_if<std::is_floating_point<T>::value, T>::type GetImpl(T left, T right);
+
+        template <typename T>
+        T GetImpl(const std::vector<T>& data);
 
         // Member data
         std::random_device m_RandomDevice;
@@ -97,6 +103,11 @@ namespace Ng {
         return left < right ?
                RealDistribution<T>(left, right)(m_MersenneTwister) :
                RealDistribution<T>(right, left)(m_MersenneTwister);
+    }
+
+    template <typename T>
+    T Random::GetImpl(const std::vector<T>& data) {
+        return data[GetImpl<std::size_t>(0, data.size() - 1)];
     }
 
 } // namespace Ng
