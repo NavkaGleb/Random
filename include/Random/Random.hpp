@@ -13,6 +13,7 @@
 #include <random>
 #include <chrono>
 #include <numeric>
+#include <vector>
 
 namespace Ng {
 
