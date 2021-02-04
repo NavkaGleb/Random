@@ -40,10 +40,13 @@ namespace Ng {
         static T Get(T left = Limit<T>::min(), T right = Limit<T>::max());
 
         template <typename T>
+        static T Get(const std::initializer_list<T>& list);
+
+        template <typename T>
         static T Get(const std::vector<T>& data);
 
         // Operators
-        Random& operator=(const Random& other) = delete;
+        Random& operator =(const Random& other) = delete;
 
     private:
         // Member constructor
@@ -61,6 +64,9 @@ namespace Ng {
 
         template <typename T>
         typename std::enable_if<std::is_floating_point<T>::value, T>::type GetImpl(T left, T right);
+
+        template <typename T>
+        T GetImpl(const std::initializer_list<T>& list);
 
         template <typename T>
         T GetImpl(const std::vector<T>& data);
@@ -87,6 +93,11 @@ namespace Ng {
     }
 
     template <typename T>
+    T Random::Get(const std::initializer_list<T>& list) {
+        return GetInstance().GetImpl(list);
+    }
+
+    template <typename T>
     T Random::Get(const std::vector<T>& data) {
         return GetInstance().GetImpl(data);
     }
@@ -109,6 +120,13 @@ namespace Ng {
         return left < right ?
                RealDistribution<T>(left, right)(m_MersenneTwister) :
                RealDistribution<T>(right, left)(m_MersenneTwister);
+    }
+
+    template <typename T>
+    T Random::GetImpl(const std::initializer_list<T>& list) {
+        std::vector<T> data(list.begin(), list.end());
+
+        return data[GetImpl<std::size_t>(0, data.size() - 1)];
     }
 
     template <typename T>
