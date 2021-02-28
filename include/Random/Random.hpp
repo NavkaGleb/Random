@@ -45,6 +45,8 @@ namespace Ng {
         template <typename T>
         static T Get(const std::vector<T>& data);
 
+        static std::string GetString(int size, int left = 33, int right = 126);
+
         // Operators
         Random& operator =(const Random& other) = delete;
 
@@ -70,6 +72,8 @@ namespace Ng {
 
         template <typename T>
         T GetImpl(const std::vector<T>& data);
+
+        std::string GetStringImpl(int size, int left, int right);
 
         // Member data
         std::random_device m_RandomDevice;
