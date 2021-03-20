@@ -1,9 +1,17 @@
 cmake_minimum_required(VERSION 3.17)
 project(NgRandom)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 
-add_library(NgRandom STATIC include/Random/Random.hpp include/Random/Random.cpp)
+file(GLOB HEADER_FILES
+    include/Random/*.hpp
+)
 
-target_include_directories(NgRandom PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-set_target_properties(NgRandom PROPERTIES LINKER_LANGUAGE CXX)
+file(GLOB SOURCE_FILES
+    include/Random/*.cpp
+)
+
+add_library(${PROJECT_NAME} STATIC ${HEADER_FILES} ${SOURCE_FILES})
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
