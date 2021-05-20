@@ -43,6 +43,9 @@ namespace Ng {
         template <typename T>
         static T Get();
 
+        template <typename T>
+        static T Get(const T& min, const T& max);
+
         template <BoolConcept T>
         static T Get(float probability = 0.5f);
 
@@ -50,13 +53,13 @@ namespace Ng {
         static T Get();
 
         template <IntegralConcept T>
-        static T Get(T left, T right);
+        static T Get(const T& left, const T& right);
 
         template <FloatingPointConcept T>
         static T Get();
 
         template <FloatingPointConcept T>
-        static T Get(T left, T right);
+        static T Get(const T& left, const T& right);
 
         template <typename T>
         static T Get(const std::vector<T>& data);
