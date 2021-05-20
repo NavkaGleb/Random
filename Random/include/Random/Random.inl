@@ -1,4 +1,11 @@
+#include <stdexcept>
+
 namespace Ng {
+
+    template <typename T>
+    T Random::Get() {
+        throw std::runtime_error("Ng::Random::Get: Called for an unknown type!");
+    }
 
     template <BoolConcept T>
     T Random::Get(float probability) {
@@ -6,10 +13,20 @@ namespace Ng {
     }
 
     template <IntegralConcept T>
+    T Random::Get() {
+        return Get<T>(Limit<T>::min(), Limit<T>::max());
+    }
+
+    template <IntegralConcept T>
     T Random::Get(T left, T right) {
         auto& mt = GetData().MersenneTwister;
 
         return left < right ? IntegralDist<T>(left, right)(mt) : IntegralDist<T>(right, left)(mt);
+    }
+
+    template <FloatingPointConcept T>
+    T Random::Get() {
+        return Get<T>(Limit<T>::min(), Limit<T>::max());
     }
 
     template <FloatingPointConcept T>

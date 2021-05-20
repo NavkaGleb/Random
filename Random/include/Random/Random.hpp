@@ -40,14 +40,23 @@ namespace Ng {
         ~Random() = default;
 
     public:
+        template <typename T>
+        static T Get();
+
         template <BoolConcept T>
-        static T Get(float probability);
+        static T Get(float probability = 0.5f);
 
         template <IntegralConcept T>
-        static T Get(T left = Limit<T>::min(), T right = Limit<T>::max());
+        static T Get();
+
+        template <IntegralConcept T>
+        static T Get(T left, T right);
 
         template <FloatingPointConcept T>
-        static T Get(T left = Limit<T>::min(), T right = Limit<T>::max());
+        static T Get();
+
+        template <FloatingPointConcept T>
+        static T Get(T left, T right);
 
         template <typename T>
         static T Get(const std::vector<T>& data);
