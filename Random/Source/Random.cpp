@@ -6,7 +6,7 @@ namespace Ng {
         std::string result(size, '\0');
 
         for (auto& ch : result)
-            ch = Get(left, right);
+            ch = GetFromRange(left, right);
 
         return result;
     }
