@@ -5,7 +5,7 @@
 /// # #  ##  ## #  # # #   # #   # #     #
 /// #  # #    # #   ## ####   ###  #     #
 ///
-/// Version 2.0
+/// Version 2.1
 //////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -18,13 +18,7 @@
 namespace Ng {
 
     template <typename T>
-    concept IntegralConcept = std::is_integral_v<T>;
-
-    template <typename T>
     concept BoolConcept = std::is_same_v<T, bool>;
-
-    template <typename T>
-    concept FloatingPointConcept = std::is_floating_point_v<T>;
 
     class Random {
     public:
@@ -48,18 +42,6 @@ namespace Ng {
 
         template <BoolConcept T>
         static T Get(float probability = 0.5f);
-
-        template <IntegralConcept T>
-        static T Get();
-
-        template <IntegralConcept T>
-        static T GetFromRange(const T& left, const T& right);
-
-        template <FloatingPointConcept T>
-        static T Get();
-
-        template <FloatingPointConcept T>
-        static T GetFromRange(const T& left, const T& right);
 
         static std::string GetString(std::size_t size, char left = 33, char right = 126);
 
