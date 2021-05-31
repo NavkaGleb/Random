@@ -6,7 +6,7 @@
 
 int main() {
     // Return random integer number from -5 to 5
-    std::cout << Ng::Random::Get(-5, 5) << std::endl;
+    std::cout << Ng::Random::GetFromRange(-5, 5) << std::endl;
 
     // Return 'true' value with probability 0.4
     std::cout << Ng::Random::Get<bool>(0.4f) << std::endl;
