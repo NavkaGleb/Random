@@ -2,11 +2,11 @@
 
 namespace Ng {
 
-    std::string Random::GetString(std::size_t size, char left, char right) {
+    std::string Random::GetString(std::size_t size, char min, char max) {
         std::string result(size, '\0');
 
         for (auto& ch : result)
-            ch = GetFromRange(left, right);
+            ch = GetFromRange(min, max);
 
         return result;
     }

@@ -10,6 +10,7 @@ file(GLOB SOURCE_FILES
 )
 
 add_library(${TARGET} STATIC ${HEADER_FILES} ${SOURCE_FILES})
+add_library(Ng::Random ALIAS ${TARGET})
 
 target_include_directories(${TARGET}
     PUBLIC
